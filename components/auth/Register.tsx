@@ -1,7 +1,8 @@
 import React, { useRef } from 'react'
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_FIRESTORE } from '../../firebaseConfig';
+import { collection, doc, setDoc } from '@firebase/firestore';
 
 type FormData = {
     email: string;
@@ -24,8 +25,22 @@ export default function Register() {
         console.log(data);
 
         createUserWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
-        .then((result: any) => {
-            console.log("result", result);
+        .then(async (result: any) => {
+            if (FIREBASE_AUTH.currentUser) {
+                const userDocRef = doc(FIREBASE_FIRESTORE, 'users', FIREBASE_AUTH.currentUser.uid);
+        
+                // Save the name and email to Firestore
+                await setDoc(userDocRef, {
+                    name: data.name,
+                    email: data.email
+                });
+        
+                console.log("result", result);
+                Alert.alert("Success!", "You have been successfully registered!"); 
+            } else {
+                console.log("Error: Current user is null");
+                Alert.alert("Error", "Current user is not available"); 
+            }
             Alert.alert("Success!", "You have been successfully registered!"); 
         })
         .catch((error: any) => {
