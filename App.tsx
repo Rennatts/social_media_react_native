@@ -7,6 +7,9 @@ import { FIREBASE_AUTH } from './firebaseConfig';
 import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
 import LoginScreen from './components/auth/Login';
+import Main from './components/Main';
+import { Provider } from 'react-redux';
+import { store } from './components/redux/store';
 
 const Stack = createStackNavigator();
 
@@ -67,9 +70,15 @@ export default function App() {
     }
   
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text>User logged in</Text>
-      </View>
+      <Provider store={store}>
+        <Stack.Navigator initialRouteName="landing">
+          <Stack.Screen 
+            name="main" 
+            component={Main} 
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+        </Stack.Navigator>
+      </Provider>
     );
   }
   
@@ -77,18 +86,6 @@ export default function App() {
   return (
     <NavigationContainer>
       {isUserLoaded()}
-      {/* <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen 
-          name="Landing" 
-          component={LandingScreen}
-          options={{ headerShown: false }}
-        ></Stack.Screen>
-        <Stack.Screen 
-          name="register" 
-          component={RegisterScreen}
-          options={{ headerShown: false }}
-        ></Stack.Screen>
-      </Stack.Navigator> */}
     </NavigationContainer>
   );
 }
