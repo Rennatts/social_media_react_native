@@ -10,6 +10,8 @@ import LoginScreen from './components/auth/Login';
 import Main from './components/Main';
 import { Provider } from 'react-redux';
 import { store } from './components/redux/store';
+import TakePicture from './components/main/TakePicture';
+import CreatePost from './components/main/CreatePost';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +77,15 @@ export default function App() {
           <Stack.Screen 
             name="main" 
             component={Main} 
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+          <Stack.Screen 
+            name="add_post" 
+            component={TakePicture} 
+          ></Stack.Screen>
+          <Stack.Screen 
+            name="createPost" 
+            component={CreatePost}
             options={{ headerShown: false }}
           ></Stack.Screen>
         </Stack.Navigator>

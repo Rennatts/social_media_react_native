@@ -23,7 +23,6 @@ export default function Login() {
         signInWithEmailAndPassword(FIREBASE_AUTH, data.email, data.password)
         .then((result: any) => {
             console.log("result", result);
-            // navigator.navigate('landing')
         })
         .catch((error: any) => {
             console.log("error", error);

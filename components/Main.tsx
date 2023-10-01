@@ -6,14 +6,16 @@ import { fetchUser } from './redux/actions/index';
 import { Dispatch } from 'redux';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import FeedScreen from './main/Feed';
 import ProfileScreen from './main/Profile';
-import AddPostScreen from './main/AddPost';
 
 
+const Tab = createMaterialBottomTabNavigator();
 
-const Tab = createBottomTabNavigator();
+const EmptyScreen = () => {
+    return (null)
+}
 
 function Main(props: any): ReactNode {
     useEffect(() => {
@@ -27,7 +29,7 @@ function Main(props: any): ReactNode {
         }
 
         return (
-            <Tab.Navigator>
+            <Tab.Navigator initialRouteName='feed' labeled={false}>
                 <Tab.Screen 
                 name="feed" 
                 component={FeedScreen}
@@ -41,24 +43,30 @@ function Main(props: any): ReactNode {
                     )
                 }}/>
                 <Tab.Screen 
-                name="profile" 
-                component={ProfileScreen}
+                name="AddContainer" 
+                component={EmptyScreen}
+                listeners={({navigation}) => ({
+                    tabPress: event => {
+                        event.preventDefault();
+                        navigation.navigate("add_post")
+                    }
+                })}
                 options={{ 
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons 
-                        name="account-circle" 
+                        name="plus-box" 
                         color={color}
                         size={26}
                         ></MaterialCommunityIcons>
                     )
                 }}/>
                 <Tab.Screen 
-                name="add_post" 
-                component={AddPostScreen}
+                name="profile" 
+                component={ProfileScreen}
                 options={{ 
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons 
-                        name="plus-blox" 
+                        name="account-circle" 
                         color={color}
                         size={26}
                         ></MaterialCommunityIcons>
