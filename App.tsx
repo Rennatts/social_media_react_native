@@ -1,8 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import { useEffect, useState } from 'react';
 import { FIREBASE_AUTH } from './firebaseConfig';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 
 import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
@@ -96,16 +98,16 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {isUserLoaded()}
+      <View style={styles.container}>
+        {isUserLoaded()}
+      </View>
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: Platform.OS === 'android' ? 25 : 0, 
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  }
 });

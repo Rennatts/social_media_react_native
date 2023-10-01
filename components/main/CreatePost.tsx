@@ -2,10 +2,17 @@ import React, { useRef } from 'react'
 import { Button, TextInput, StyleSheet, Text, View, Image } from 'react-native';
 import { FIREBASE_AUTH, FIREBASE_FIRESTORE, FIREBASE_STORAGE } from '../../firebaseConfig';
 import { getDownloadURL, uploadBytes, ref } from '@firebase/storage';
-import { addDoc, collection } from '@firebase/firestore';
+import { addDoc, collection, serverTimestamp } from '@firebase/firestore';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+
+type RootStackParamList = {
+  feed: undefined;
+};
 
 
 type CreatePostProps = {
+  navigation: StackNavigationProp<RootStackParamList, 'feed'>;
   route: {
     params: {
       image: string;
@@ -13,10 +20,10 @@ type CreatePostProps = {
   };
 };
 
-export default function CreatePost({ route }: CreatePostProps) {
+export default function CreatePost({ route, navigation }: CreatePostProps) {
   const { image } = route.params;
   const postCaptionRef = useRef<string>('');
-  //console.log("==========", image, "========");
+  console.log("==========", route, "========");
 
   const uploadImage = async () => {
     try {
@@ -41,6 +48,7 @@ export default function CreatePost({ route }: CreatePostProps) {
         imageUrl: imageUrl,
         caption: postCaptionRef.current,
         uid: uid,
+        createdAt: serverTimestamp(),
       };
 
       await addDoc(postsCollection, newPost);
@@ -60,9 +68,9 @@ export default function CreatePost({ route }: CreatePostProps) {
     return blob;
   };
   
-
   return (
     <View style={{ flex: 1 }}>
+      <Button title="X" onPress={() => navigation.navigate("feed")}></Button>
       {image && <Image source={{ uri: image }} style={{ flex: 1 }}></Image>}
       <TextInput 
         onChangeText={text => postCaptionRef.current = text}

@@ -9,6 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import FeedScreen from './main/Feed';
 import ProfileScreen from './main/Profile';
+import { FIREBASE_AUTH } from '../firebaseConfig';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -18,10 +19,21 @@ const EmptyScreen = () => {
 }
 
 function Main(props: any): ReactNode {
+
     useEffect(() => {
-        props.fetchUser();
-        console.log("----currentUser------", props.currentUser, "----currentUser------");
+        const unsubscribe = FIREBASE_AUTH.onAuthStateChanged((user) => {
+            if (user) {
+                props.fetchUser();
+            } else {
+                // You might want to handle logout here, for example:
+                // props.logoutUser();
+            }
+        });
+
+        // Clean up the listener on component unmount.
+        return () => unsubscribe();
     }, []);
+
 
     const showUserInfo = () => {
         if (props.currentUser === undefined) {

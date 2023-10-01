@@ -1,19 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, Text, FlatList, Image, StyleSheet} from 'react-native';
 import { FIREBASE_AUTH, FIREBASE_FIRESTORE } from '../../firebaseConfig';
 import { query, where, collection, getDocs } from '@firebase/firestore';
+import { bindActionCreators } from 'redux';
+import { fetchUser } from '../redux/actions';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+
 
 type Post = {
     id: string;
     imageUrl: string;
     caption: string;
+    createdAt: string;
 };
 
 
-export default function Profile() {
+function Profile(props: any) {
     const [posts, setPosts] = useState<Post[]>([]);
+    const userName = props.currentUser?.name;
 
     const uid = FIREBASE_AUTH.currentUser?.uid;
+
+    const postsQuery = useMemo(() => {
+        return query(collection(FIREBASE_FIRESTORE, 'posts'), where('uid', '==', uid));
+    }, [uid]);
+    
+    const fetchedPosts = useMemo(async () => {
+        const querySnapshot = await getDocs(postsQuery);
+        const postsArray: any[] = [];
+        querySnapshot.forEach(doc => {
+            postsArray.push({ ...doc.data(), id: doc.id });
+        });
+        return postsArray;
+    }, [postsQuery]);
+
 
     useEffect(() => {
         if (!uid) {
@@ -21,26 +42,17 @@ export default function Profile() {
             return;
         }
 
-        // Define a query to fetch posts from Firestore where uid matches the current user's uid
-        const postsQuery = query(collection(FIREBASE_FIRESTORE, 'posts'), where('uid', '==', uid));
 
-        // Fetch the posts
-        const fetchPosts = async () => {
-            const querySnapshot = await getDocs(postsQuery);
-            const fetchedPosts: any[] = [];
-            querySnapshot.forEach(doc => {
-                fetchedPosts.push({ ...doc.data(), id: doc.id });
-            });
-            setPosts(fetchedPosts);
-        }
+        (async () => {
+            const result = await fetchedPosts;
+            setPosts(result);
+        })();
+    }, [fetchedPosts, uid]);
 
-        fetchPosts();
-    }, [uid]);
-
-    const PostItem = ({ post }: { post: Post }) => (
-        <View>
-            <Image source={{uri: post.imageUrl}} style={{width: 100, height: 100}} />
-            <Text>{post.caption}</Text>
+    const Posts = ({ post }: { post: Post }) => (
+        <View style={styles.imageBox}>
+            <Image source={{uri: post.imageUrl}} style={styles.image} />
+            <Text style={styles.captionArea}>{post.caption}</Text>
         </View>
     );
     
@@ -48,11 +60,47 @@ export default function Profile() {
     return (
         <View style={{ flex: 1 }}>
             <Text>Profile</Text>
+            {userName && <Text>{userName}</Text>}
             <FlatList 
+                style={styles.container}
                 data={posts}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => <PostItem post={item} />} 
+                renderItem={({ item }) => <Posts post={item} />} 
             />
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    imageBox: {
+        flex: 1,
+        alignItems: 'center',
+        marginTop: '10%', 
+        marginLeft: '5%', 
+        marginRight : '5%', 
+    },
+    image: {
+        width: '100%', 
+        aspectRatio: 16/9,
+        resizeMode: 'cover'
+    },
+    captionArea: {
+        padding: '5%',
+        alignItems: 'flex-start',
+        backgroundColor: 'white',
+        width: '100%',
+    }
+});
+
+
+const mapStateToProps = (store: any) => ({
+    currentUser: store.userState.currentUser
+});
+
+const mapDispatchProps = (dispatch: Dispatch) => bindActionCreators({ fetchUser }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchProps)(Profile);
+
