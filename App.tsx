@@ -26,7 +26,6 @@ export default function App() {
 
   useEffect(() => {
     FIREBASE_AUTH.onAuthStateChanged((user: any) => {
-      console.log("------user-----", user, "------user-----")
       if(!user) {
         setAuthState(prevState => ({
           ...prevState, 

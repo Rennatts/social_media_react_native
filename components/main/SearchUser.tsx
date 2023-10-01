@@ -4,15 +4,24 @@ import { FIREBASE_FIRESTORE } from '../../firebaseConfig';
 import { where, query, getDocs, collection } from '@firebase/firestore';
 import { FlatList } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type Users = {
     name: string,
     uid: string;
 }
 
+type RootStackParamList = {
+    profile: {
+        uid: string;
+    };
+};
+  
+type NavigationType = StackNavigationProp<RootStackParamList, 'profile'>;
+
 export default function SearchUser() {
     const [ users, setUsers ] = useState<Users[]>([]);
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationType>();
 
     const fetchUsers = async (search: string) => {
         const usersCollection = collection(FIREBASE_FIRESTORE, 'users');
