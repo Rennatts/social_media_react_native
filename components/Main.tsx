@@ -10,6 +10,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import FeedScreen from './main/Feed';
 import ProfileScreen from './main/Profile';
 import { FIREBASE_AUTH } from '../firebaseConfig';
+import SearchUser from './main/SearchUser';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -49,6 +50,18 @@ function Main(props: any): ReactNode {
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons 
                         name="home" 
+                        color={color}
+                        size={26}
+                        ></MaterialCommunityIcons>
+                    )
+                }}/>
+                <Tab.Screen 
+                name="searchUser" 
+                component={SearchUser}
+                options={{ 
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons 
+                        name="magnify" 
                         color={color}
                         size={26}
                         ></MaterialCommunityIcons>

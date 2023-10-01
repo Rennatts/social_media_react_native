@@ -15,7 +15,6 @@ export function fetchUser() {
             
             getDoc(userRef)
             .then((snapshot) => {
-                console.log("aaaaaaaa", snapshot.exists(), "aaaaaaa")
                 if (snapshot.exists()) {
                     dispatch({
                         type: USER_STATE_CHANGE,

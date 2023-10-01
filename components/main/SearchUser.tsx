@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import { FIREBASE_FIRESTORE } from '../../firebaseConfig';
 import { where, query, getDocs, collection } from '@firebase/firestore';
 import { FlatList } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 type Users = {
     name: string,
     uid: string;
 }
 
-export default function Feed() {
+export default function SearchUser() {
     const [ users, setUsers ] = useState<Users[]>([]);
+    const navigation = useNavigation();
 
     const fetchUsers = async (search: string) => {
         const usersCollection = collection(FIREBASE_FIRESTORE, 'users');
@@ -38,7 +40,9 @@ export default function Feed() {
             horizontal={false} 
             data={users}
             renderItem={({item}) => (
-                <Text>{item.name}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('profile', {uid: item.uid})}>
+                    <Text>{item.name}</Text>
+                </TouchableOpacity>
             )}
             ></FlatList>
         </View>

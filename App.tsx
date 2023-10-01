@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import { store } from './components/redux/store';
 import TakePicture from './components/main/TakePicture';
 import CreatePost from './components/main/CreatePost';
+import SearchUser from './components/main/SearchUser';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +80,11 @@ export default function App() {
           <Stack.Screen 
             name="main" 
             component={Main} 
+            options={{ headerShown: false }}
+          ></Stack.Screen>
+          <Stack.Screen 
+            name="searchUser" 
+            component={SearchUser}
             options={{ headerShown: false }}
           ></Stack.Screen>
           <Stack.Screen 

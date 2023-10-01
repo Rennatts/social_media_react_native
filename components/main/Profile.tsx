@@ -15,16 +15,30 @@ type Post = {
     createdAt: string;
 };
 
+// Props you expect to be passed to the component
+interface OwnProps {
+    uid?: string;
+}
 
-function Profile(props: any) {
+// Using ReturnType to infer the state shape from your mapStateToProps
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+// Using ReturnType to infer the dispatch props shape from your mapDispatchProps
+type DispatchProps = ReturnType<typeof mapDispatchProps>;
+
+// Combining all the above props
+type ProfileProps = OwnProps & StateProps & DispatchProps;
+
+
+function Profile({ uid, currentUser, fetchUser }: ProfileProps) {
     const [posts, setPosts] = useState<Post[]>([]);
-    const userName = props.currentUser?.name;
+    const userName = currentUser?.name;
 
-    const uid = FIREBASE_AUTH.currentUser?.uid;
+    const ProfileUid = FIREBASE_AUTH.currentUser?.uid || uid;
 
     const postsQuery = useMemo(() => {
-        return query(collection(FIREBASE_FIRESTORE, 'posts'), where('uid', '==', uid));
-    }, [uid]);
+        return query(collection(FIREBASE_FIRESTORE, 'posts'), where('uid', '==', ProfileUid));
+    }, [ProfileUid]);
     
     const fetchedPosts = useMemo(async () => {
         const querySnapshot = await getDocs(postsQuery);
@@ -37,7 +51,7 @@ function Profile(props: any) {
 
 
     useEffect(() => {
-        if (!uid) {
+        if (!ProfileUid) {
             console.error("User not logged in!");
             return;
         }
@@ -47,7 +61,7 @@ function Profile(props: any) {
             const result = await fetchedPosts;
             setPosts(result);
         })();
-    }, [fetchedPosts, uid]);
+    }, [fetchedPosts, ProfileUid]);
 
     const Posts = ({ post }: { post: Post }) => (
         <View style={styles.imageBox}>
