@@ -26,12 +26,9 @@ function Main(props: any): ReactNode {
             if (user) {
                 props.fetchUser();
             } else {
-                // You might want to handle logout here, for example:
-                // props.logoutUser();
             }
         });
 
-        // Clean up the listener on component unmount.
         return () => unsubscribe();
     }, []);
 
@@ -47,7 +44,7 @@ function Main(props: any): ReactNode {
                 name="feed" 
                 component={FeedScreen}
                 options={{ 
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons 
                         name="home" 
                         color={color}
@@ -59,7 +56,7 @@ function Main(props: any): ReactNode {
                 name="searchUser" 
                 component={SearchUser}
                 options={{ 
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons 
                         name="magnify" 
                         color={color}
@@ -77,7 +74,7 @@ function Main(props: any): ReactNode {
                     }
                 })}
                 options={{ 
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons 
                         name="plus-box" 
                         color={color}
@@ -89,7 +86,7 @@ function Main(props: any): ReactNode {
                 name="profile" 
                 component={ProfileScreen}
                 options={{ 
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons 
                         name="account-circle" 
                         color={color}

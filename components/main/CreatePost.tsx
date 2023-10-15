@@ -7,12 +7,12 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 
 type RootStackParamList = {
-  feed: undefined;
+  createPost: undefined;
 };
 
 
 type CreatePostProps = {
-  navigation: StackNavigationProp<RootStackParamList, 'feed'>;
+  navigation: StackNavigationProp<RootStackParamList, 'createPost'>;
   route: {
     params: {
       image: string;

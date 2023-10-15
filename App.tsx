@@ -94,7 +94,7 @@ export default function App() {
             name="createPost" 
             component={CreatePost}
             options={{ headerShown: false }}
-          ></Stack.Screen>
+          />
         </Stack.Navigator>
       </Provider>
     );
