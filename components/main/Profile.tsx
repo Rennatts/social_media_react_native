@@ -31,6 +31,7 @@ type ProfileProps = OwnProps & StateProps & DispatchProps;
 
 
 function Profile({ uid, currentUser, fetchUser }: ProfileProps) {
+    const [following, setFollowing] = useState<boolean>(false);
     const [posts, setPosts] = useState<Post[]>([]);
     const userName = currentUser?.name;
 
@@ -48,7 +49,6 @@ function Profile({ uid, currentUser, fetchUser }: ProfileProps) {
         });
         return postsArray;
     }, [postsQuery]);
-
 
     useEffect(() => {
         if (!ProfileUid) {

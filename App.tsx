@@ -89,6 +89,7 @@ export default function App() {
           <Stack.Screen 
             name="add_post" 
             component={TakePicture} 
+            options={{ title: 'Crie um post' }}
           ></Stack.Screen>
           <Stack.Screen 
             name="createPost" 

@@ -8,6 +8,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 type RootStackParamList = {
   createPost: undefined;
+  feed: undefined;
 };
 
 

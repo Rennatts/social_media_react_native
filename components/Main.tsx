@@ -57,13 +57,14 @@ function Main(props: any): ReactNode {
                 component={SearchUser}
                 options={{ 
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons 
+                    <MaterialCommunityIcons 
                         name="magnify" 
                         color={color}
                         size={26}
-                        ></MaterialCommunityIcons>
+                    ></MaterialCommunityIcons>
                     )
-                }}/>
+                }}
+                />
                 <Tab.Screen 
                 name="AddContainer" 
                 component={EmptyScreen}

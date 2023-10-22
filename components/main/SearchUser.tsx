@@ -19,6 +19,7 @@ type RootStackParamList = {
   
 type NavigationType = StackNavigationProp<RootStackParamList, 'profile'>;
 
+
 export default function SearchUser() {
     const [ users, setUsers ] = useState<Users[]>([]);
     const navigation = useNavigation<NavigationType>();

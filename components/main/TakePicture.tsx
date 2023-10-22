@@ -40,8 +40,6 @@ export default function TakePicture({ navigation }: AppPostProps) {
     }
   }
 
-  console.log("--image---", typeof(image), "---image----")
-
   function toggleCameraType() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
